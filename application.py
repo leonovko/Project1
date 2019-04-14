@@ -1,9 +1,11 @@
 import os
 
-from flask import Flask, session
+from flask import Flask, render_template, request, session
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+import hashlib
+
 
 app = Flask(__name__)
 
@@ -23,4 +25,20 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
-    return "Project 1: TODO"
+    return render_template("index.html")
+
+@app.route("/login", methods=["POST"])
+def login():
+    username = request.form.get("username")
+    password=(hashlib.md5((request.form.get("password")).encode()))
+    password=password.hexdigest()
+
+    if db.execute("SELECT * FROM users WHERE  (username = :username) AND (password=:password)",
+            {"username": username, "password": password}).rowcount == 0:
+        return render_template("error.html", message="incorrect username or password")
+
+    #check username and password
+    db.execute("SELECT username FROM users WHERE  (username = :username) AND (password=:password)",
+            {"username": username, "password": password})
+    db.commit()
+    return render_template("success.html", username=username)
