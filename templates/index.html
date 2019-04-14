@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block body %}
+    <h1>Login</h1>
+
+    <form action="{{ url_for('login') }}" method="post">
+
+        <div class="form-group">
+            <input class="form-control" name="username" placeholder="Your username">
+        </div>
+
+        <div class="form-group">
+            <input class="form-control" name="password" type="password" placeholder="Your password">
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary">Login</button>
+        </div>
+
+    </form>
+{% endblock %}
