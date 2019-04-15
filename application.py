@@ -40,5 +40,25 @@ def login():
     #check username and password
     db.execute("SELECT username FROM users WHERE  (username = :username) AND (password=:password)",
             {"username": username, "password": password})
+    #db.commit()
+    return render_template("success.html", username=username)
+
+
+@app.route("/registerform", methods=["POST"])
+def registerform():
+    return render_template("registerform.html")
+
+@app.route("/register", methods=["POST"])
+def register():
+    username = request.form.get("username")
+    password=(hashlib.md5((request.form.get("password")).encode()))
+    password=password.hexdigest()
+
+    if db.execute("SELECT * FROM users WHERE  (username = :username)",
+        {"username": username}).rowcount == 1:
+        return render_template("error.html", message="username already existing")
+
+    db.execute("INSERT INTO users (username, password) VALUES (:username, :password)",
+        {"username":username, "password":password})
     db.commit()
     return render_template("success.html", username=username)
