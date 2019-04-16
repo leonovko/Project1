@@ -7,5 +7,16 @@
 {% block body %}
     <h1>Success!</h1>
 
-    You have successfully logged in {{ username }}! 
+    You have successfully logged in {{ username }}!
+
+
+
+    <form action="{{ url_for('logout') }}" method="post">
+
+        <div class="form-group">
+            <button class="btn btn-primary">Logout</button>
+        </div>
+
+    </form>
+
 {% endblock %}

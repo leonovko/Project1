@@ -1,10 +1,10 @@
 import os
+import hashlib
 
 from flask import Flask, render_template, request, session
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-import hashlib
 
 
 app = Flask(__name__)
@@ -25,7 +25,11 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    if not session.get('logged_in'):
+        return render_template("index.html")
+    else:
+        return render_template("success.html")
+
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -33,16 +37,25 @@ def login():
     password=(hashlib.md5((request.form.get("password")).encode()))
     password=password.hexdigest()
 
-    if db.execute("SELECT * FROM users WHERE  (username = :username) AND (password=:password)",
-            {"username": username, "password": password}).rowcount == 0:
+    #check username and password, the one above works as well.
+    query=db.execute("SELECT * FROM users WHERE  (username = :username) AND (password=:password)",
+            {"username": username, "password": password})
+    result=query.first()
+
+    if result:
+        session['logged_in'] = True
+        session['user_id']=result.id
+        return render_template("success.html", username=result.username)
+    else:
         return render_template("error.html", message="incorrect username or password")
 
-    #check username and password
-    db.execute("SELECT username FROM users WHERE  (username = :username) AND (password=:password)",
-            {"username": username, "password": password})
-    #db.commit()
-    return render_template("success.html", username=username)
 
+@app.route("/logout", methods=["POST"])
+def logout():
+    session['logged_in'] = False
+    session['user_id']=[]
+    #return render_template("index.html")
+    return index()
 
 @app.route("/registerform", methods=["POST"])
 def registerform():
