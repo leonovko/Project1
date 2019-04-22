@@ -7,10 +7,44 @@
 {% block body %}
 {% if session['logged_in'] %}
 
-<div>
-  Once a user has logged in, they should be taken to a page where they can search for a book
-</div>
 
+<br>
+
+  <nav class="navbar navbar-light bg-light">
+      <span class="navbar-text">
+          Search for a book &ensp;
+      </span>
+
+      <form action="{{ url_for('search') }}" method="post" class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" name="isbn" placeholder="isbn">
+                <input class="form-control mr-sm-2" name="title" placeholder="title">
+                <input class="form-control mr-sm-2" name="author" placeholder="author">
+                <button class="btn btn-outline-success my-2 my-sm-0">Search</button>
+      </form>
+  </nav><br>
+
+  <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ISBN</th>
+            <th scope="col">Title</th>
+            <th scope="col">Author</th>
+            <th scope="col">Year</th>
+          </tr>
+        </thead>
+        <tbody>
+
+            {% for book in books %}
+                <tr>
+                  <td>{{ book.isbn }}</td>
+                  <td>{{ book.title }}</td>
+                  <td>{{ book.author }}</td>
+                  <td>{{ book.year }}</td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
 
 {% else %}
 

@@ -76,3 +76,14 @@ def register():
         {"username":username, "password":password})
     db.commit()
     return render_template("index.html", username=username)
+
+
+@app.route("/search", methods=["POST"])
+def search():
+    isbn = request.form.get("isbn")
+    title = request.form.get("title")
+    author = request.form.get("author")
+
+    books = db.execute("SELECT * FROM books WHERE (isbn = :isbn) or (title=:title) or (author=:author)",
+            {"isbn": isbn, "title": title, "author":author}).fetchall()
+    return render_template("index.html", books=books)
