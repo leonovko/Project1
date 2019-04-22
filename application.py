@@ -26,9 +26,10 @@ db = scoped_session(sessionmaker(bind=engine))
 @app.route("/")
 def index():
     if not session.get('logged_in'):
-        return render_template("index.html")
+        #return render_template("index.html")
+        return render_template("registerform.html")
     else:
-        return render_template("success.html")
+        return render_template("index.html")
 
 
 @app.route("/login", methods=["POST"])
@@ -45,7 +46,7 @@ def login():
     if result:
         session['logged_in'] = True
         session['user_id']=result.id
-        return render_template("success.html", username=result.username)
+        return render_template("index.html", username=result.username)
     else:
         return render_template("error.html", message="incorrect username or password")
 
@@ -74,4 +75,4 @@ def register():
     db.execute("INSERT INTO users (username, password) VALUES (:username, :password)",
         {"username":username, "password":password})
     db.commit()
-    return render_template("success.html", username=username)
+    return render_template("index.html", username=username)

@@ -1,41 +1,20 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Log In
+    Search page
 {% endblock %}
 
 {% block body %}
 {% if session['logged_in'] %}
 
-You're logged in already!
+<div>
+  Once a user has logged in, they should be taken to a page where they can search for a book
+</div>
+
 
 {% else %}
-    <h1>Login</h1>
 
-    <form action="{{ url_for('login') }}" method="post">
+    You need to login first!
 
-        <div class="form-group">
-            <input class="form-control" name="username" placeholder="Your username">
-        </div>
-
-        <div class="form-group">
-            <input class="form-control" name="password" type="password" placeholder="Your password">
-        </div>
-
-        <div class="form-group">
-            <button class="btn btn-primary">Login</button>
-        </div>
-
-    </form>
-
-    <h1>You don't have an account? </h1>
-
-    <form action="{{ url_for('registerform') }}" method="post">
-
-        <div class="form-group">
-            <button class="btn btn-primary">Register</button>
-        </div>
-
-    </form>
 {% endif %}
 {% endblock %}
