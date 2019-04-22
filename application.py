@@ -26,7 +26,6 @@ db = scoped_session(sessionmaker(bind=engine))
 @app.route("/")
 def index():
     if not session.get('logged_in'):
-        #return render_template("index.html")
         return render_template("registerform.html")
     else:
         return render_template("index.html")
@@ -46,6 +45,7 @@ def login():
     if result:
         session['logged_in'] = True
         session['user_id']=result.id
+        session['username']=result.username
         return render_template("index.html", username=result.username)
     else:
         return render_template("error.html", message="incorrect username or password")

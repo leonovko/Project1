@@ -26,7 +26,7 @@
     {% if session['logged_in'] %}
 
         <span class="navbar-text">
-            Hello {{ username }} &ensp;
+            Hello {{ session['username'] }} &ensp;
         </span>
 
         <form action="{{ url_for('logout') }}" method="post" class="form-inline my-2 my-lg-0">
