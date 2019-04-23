@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block body %}
+    <h1>Book Page</h1>
+
+    <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ISBN</th>
+              <th scope="col">Title</th>
+              <th scope="col">Author</th>
+              <th scope="col">Year</th>
+            </tr>
+          </thead>
+          <tbody>
+                  <tr>
+                    <td>{{ book.isbn }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.year }}</td>
+                  </tr>
+          </tbody>
+      </table>
+
+      <h2>To do: reviews that users have left for this book on my website..</h2>
+
+
+{% endblock %}

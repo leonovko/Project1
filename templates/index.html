@@ -15,7 +15,7 @@
           Search for a book &ensp;
       </span>
 
-      <form action="{{ url_for('search') }}" method="post" class="form-inline my-2 my-lg-0">
+      <form action="{{ url_for('books') }}" method="post" class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" name="isbn" placeholder="isbn">
                 <input class="form-control mr-sm-2" name="title" placeholder="title">
                 <input class="form-control mr-sm-2" name="author" placeholder="author">
@@ -38,8 +38,8 @@
 
                   {% for book in books %}
                       <tr>
-                        <td>{{ book.isbn }}</td>
-                        <td>{{ book.title }}</td>
+                        <td><a href="{{ url_for('book', book_id=book.id) }}">{{ book.isbn }}</a></td>
+                        <td><a href="{{ url_for('book', book_id=book.id) }}">{{ book.title }}</a></td>
                         <td>{{ book.author }}</td>
                         <td>{{ book.year }}</td>
                       </tr>

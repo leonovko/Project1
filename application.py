@@ -78,8 +78,8 @@ def register():
     return render_template("index.html", username=username)
 
 
-@app.route("/search", methods=["POST"])
-def search():
+@app.route("/books", methods=["POST"])
+def books():
     isbn = request.form.get("isbn")
     title = request.form.get("title")
     author = request.form.get("author")
@@ -88,3 +88,14 @@ def search():
             {"isbn": "%" + isbn + "%", "title": "%"+ title + "%", "author": "%" + author + "%"}).fetchall()
 
     return render_template("index.html", books=books)
+
+
+@app.route("/books/<int:book_id>")
+def book(book_id):
+
+    # Make sure flight exists.
+    book = db.execute("SELECT * FROM books WHERE id = :id", {"id": book_id}).fetchone()
+    if book is None:
+        return render_template("error.html", message="No such book.")
+
+    return render_template("book.html", book=book)
