@@ -84,6 +84,7 @@ def search():
     title = request.form.get("title")
     author = request.form.get("author")
 
-    books = db.execute("SELECT * FROM books WHERE (isbn = :isbn) or (title=:title) or (author=:author)",
-            {"isbn": isbn, "title": title, "author":author}).fetchall()
+    books = db.execute("SELECT * FROM books WHERE (isbn LIKE :isbn) AND (title LIKE :title) AND (author LIKE :author)",
+            {"isbn": "%" + isbn + "%", "title": "%"+ title + "%", "author": "%" + author + "%"}).fetchall()
+
     return render_template("index.html", books=books)

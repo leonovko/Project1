@@ -23,29 +23,34 @@
       </form>
   </nav><br>
 
-  <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">ISBN</th>
-            <th scope="col">Title</th>
-            <th scope="col">Author</th>
-            <th scope="col">Year</th>
-          </tr>
-        </thead>
-        <tbody>
+  {% if books|length %}
 
-            {% for book in books %}
+        <table class="table">
+              <thead>
                 <tr>
-                  <td>{{ book.isbn }}</td>
-                  <td>{{ book.title }}</td>
-                  <td>{{ book.author }}</td>
-                  <td>{{ book.year }}</td>
+                  <th scope="col">ISBN</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Author</th>
+                  <th scope="col">Year</th>
                 </tr>
-            {% endfor %}
+              </thead>
+              <tbody>
 
-        </tbody>
-    </table>
+                  {% for book in books %}
+                      <tr>
+                        <td>{{ book.isbn }}</td>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.year }}</td>
+                      </tr>
+                  {% endfor %}
 
+              </tbody>
+          </table>
+
+    {% else %}
+        <p>There were no matches</p>
+    {% endif %}
 {% else %}
 
     You need to login first!
