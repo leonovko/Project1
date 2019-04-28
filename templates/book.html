@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Register
+    Book Page
 {% endblock %}
 
 {% block body %}
@@ -26,7 +26,17 @@
           </tbody>
       </table>
 
-      <h2>To do: reviews that users have left for this book on my website..</h2>
+
+      <div>Reviews:</div><br>
+      {% for review in reviews %}
+
+        <div>User name: {{ review.username }}</div>
+        <div>Rating: {{ review.rating }}/5</div>
+        <div>Opinion: {{ review.opinion }}</div>
+        <br>
+
+
+      {% endfor %}
 
 
 {% endblock %}

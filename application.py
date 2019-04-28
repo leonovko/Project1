@@ -98,4 +98,6 @@ def book(book_id):
     if book is None:
         return render_template("error.html", message="No such book.")
 
-    return render_template("book.html", book=book)
+    reviews= db.execute("SELECT users.username, reviews.rating, reviews.opinion FROM (books INNER JOIN reviews ON books.id=reviews.book_id) INNER JOIN users ON reviews.user_id=users.id WHERE books.id = :id", {"id": book_id}).fetchall()
+
+    return render_template("book.html", book=book, reviews=reviews)
