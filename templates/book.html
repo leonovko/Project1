@@ -26,6 +26,31 @@
           </tbody>
       </table>
 
+      {% if not user_id_review_exist %}
+
+      <div>Add your review:</div><br>
+      <form action="{{ url_for('addreview') }}" method="post">
+
+            <div class="form-group">
+              <input class="form-control" name="book_id" type="hidden" value={{book.id}}>
+            </div>
+
+            <div class="form-group">
+                <input class="form-control" name="rating" placeholder="Rating between 1 and 5">
+            </div>
+
+            <div class="form-group">
+                <input class="form-control" name="opinion" placeholder="Opinion">
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+
+        {% endif %}
+
+
 
       <div>Reviews:</div><br>
       {% for review in reviews %}

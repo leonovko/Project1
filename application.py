@@ -93,11 +93,44 @@ def books():
 @app.route("/books/<int:book_id>")
 def book(book_id):
 
-    # Make sure flight exists.
+    # Make sure book exists.
     book = db.execute("SELECT * FROM books WHERE id = :id", {"id": book_id}).fetchone()
     if book is None:
         return render_template("error.html", message="No such book.")
 
     reviews= db.execute("SELECT users.username, reviews.rating, reviews.opinion FROM (books INNER JOIN reviews ON books.id=reviews.book_id) INNER JOIN users ON reviews.user_id=users.id WHERE books.id = :id", {"id": book_id}).fetchall()
 
-    return render_template("book.html", book=book, reviews=reviews)
+    user_id_review_exist=db.execute("SELECT id FROM reviews WHERE user_id = :id", {"id": session['user_id']}).fetchone()
+
+    return render_template("book.html", book=book, reviews=reviews, user_id_review_exist=user_id_review_exist)
+
+
+
+@app.route("/", methods=["POST"])
+def addreview():
+    rating = request.form.get("rating")
+    opinion = request.form.get("opinion")
+    user_id = session['user_id']
+    book_id = request.form.get("book_id")
+
+    #parsing the rating
+    try:
+       rating = int(rating)
+    except ValueError:
+        return render_template("error.html", message="The rating should be an value between 1 and 5, not a text")
+
+    if (rating < 1) or (rating > 5):
+        return render_template("error.html", message="The rating should be a value between 1 and 5")
+
+
+    #Insert the rating in the data base
+    db.execute("INSERT INTO reviews (rating, opinion, user_id, book_id) VALUES (:rating, :opinion, :user_id, :book_id )",
+        {"rating":rating, "opinion":opinion, "user_id":user_id, "book_id":book_id})
+    db.commit()
+
+    #here you should actually call the function book(book_id), but for me it didn't work
+    book = db.execute("SELECT * FROM books WHERE id = :id", {"id": book_id}).fetchone()
+    reviews= db.execute("SELECT users.username, reviews.rating, reviews.opinion FROM (books INNER JOIN reviews ON books.id=reviews.book_id) INNER JOIN users ON reviews.user_id=users.id WHERE books.id = :id", {"id": book_id}).fetchall()
+    user_id_review_exist=db.execute("SELECT id FROM reviews WHERE user_id = :id", {"id": session['user_id']}).fetchone()
+
+    return render_template("book.html", book=book, reviews=reviews, user_id_review_exist=user_id_review_exist)
