@@ -100,7 +100,7 @@ def book(book_id):
 
     reviews= db.execute("SELECT users.username, reviews.rating, reviews.opinion FROM (books INNER JOIN reviews ON books.id=reviews.book_id) INNER JOIN users ON reviews.user_id=users.id WHERE books.id = :id", {"id": book_id}).fetchall()
 
-    user_id_review_exist=db.execute("SELECT id FROM reviews WHERE user_id = :id", {"id": session['user_id']}).fetchone()
+    user_id_review_exist=db.execute("SELECT id FROM reviews WHERE (user_id = :id) AND (book_id=:book_id)", {"id": session['user_id'], "book_id":book_id}).fetchone()
 
     return render_template("book.html", book=book, reviews=reviews, user_id_review_exist=user_id_review_exist)
 
